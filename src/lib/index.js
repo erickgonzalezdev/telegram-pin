@@ -1,4 +1,6 @@
 import TelegramBotLib from './telegram-bot.js'
+import PinService from './pin-service.js'
+
 import Logger from './winston-logger.js'
 class Lib {
   constructor (config = {}) {
@@ -12,6 +14,7 @@ class Lib {
     this.config.wlogger = this.wlogger
 
     this.telegramBot = new TelegramBotLib(this.config)
+    this.pinService = new PinService(this.config)
   }
 }
 

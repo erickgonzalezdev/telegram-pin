@@ -14,7 +14,6 @@ class TelegramBotLib {
     this.TelegramBot = TelegramBot
     this.bot = {}
 
-    this.botState = {} // Bot state
     this.delayMs = 10000 // 10 seconds.
 
     this.itsAPrivateMessage = this.itsAPrivateMessage.bind(this)
