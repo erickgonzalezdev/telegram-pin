@@ -8,6 +8,7 @@ import sinon from 'sinon'
 import Libraries from '../../../src/lib/index.js'
 import UseCaseUnderTest from '../../../src/use-cases/help-command-uc.js'
 import { TelegramBotPackageMock, mockMsg } from '../mocks/telegram-bot-mock.js'
+import config from '../../../config.js'
 
 describe('#help-use-case', () => {
   let uut, libraries
@@ -15,7 +16,7 @@ describe('#help-use-case', () => {
 
   beforeEach(() => {
     sandbox = sinon.createSandbox()
-    libraries = new Libraries({ telegramBotToken: 'test token' })
+    libraries = new Libraries(config)
     libraries.telegramBot.bot = new TelegramBotPackageMock()
     uut = new UseCaseUnderTest({ libraries })
   })

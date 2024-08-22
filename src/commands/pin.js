@@ -1,19 +1,21 @@
-class HelpCommand {
+class PinCommand {
   constructor (config = {}) {
     this.useCases = config.useCases
+
     if (!this.useCases) {
       throw new Error(
-        'Instance of Use Cases library required when instantiating HelpCommand Class.'
+        'Instance of Use Cases library required when instantiating PinCommand Class.'
       )
     }
 
     this.libraries = config.libraries
     if (!this.libraries) {
       throw new Error(
-        'Instance of Libraries required when instantiating HelpCommand Class.'
+        'Instance of Libraries required when instantiating PinCommand Class.'
       )
     }
     this.wlogger = this.libraries.wlogger
+
     // Bind all sub functions
     this.process = this.process.bind(this)
   }
@@ -23,18 +25,15 @@ class HelpCommand {
       // Convert the message into an array of parts.
       const msgParts = msg.text.toString().split(' ')
 
-      // Ignore if there are any additional words in the command.
-      if (msgParts.length !== 1) return
-
-      const isReplyMsg = msg.reply_to_message
+      // Ignore if there are a reply file.
+      if (!msg.reply_to_message) return false
 
       const inputObjs = {
         msgParts,
-        isReplyMsg,
         msg
       }
       // tokenize images
-      await this.useCases.help.sendHelp(inputObjs)
+      await this.useCases.pin.pinFile(inputObjs)
 
       return true
     } catch (err) {
@@ -44,4 +43,4 @@ class HelpCommand {
   }
 }
 
-export default HelpCommand
+export default PinCommand

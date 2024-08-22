@@ -1,5 +1,6 @@
 import HelpCommand from './help.js'
 import KeyCommand from './key.js'
+import PinCommand from './pin.js'
 
 export default class Commands {
   constructor (config = {}) {
@@ -23,6 +24,7 @@ export default class Commands {
     // commands
     this.help = new HelpCommand(this.config)
     this.key = new KeyCommand(this.config)
+    this.pin = new PinCommand(this.config)
 
     // Bind function to this class.
     this.startBot = this.startBot.bind(this)
@@ -45,6 +47,7 @@ export default class Commands {
       this.bot.onText(/\/help/, this.help.process)
       this.bot.onText(/\/start/, this.help.process)
       this.bot.onText(/\/setkey/, this.key.process)
+      this.bot.onText(/\/pin/, this.pin.process)
 
       // this.bot.on('polling_error', console.log)
 

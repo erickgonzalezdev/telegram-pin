@@ -21,13 +21,16 @@ class KeyUseCase {
     try {
       const { msg, msgParts } = inObj
 
+      if (!msg) throw new Error('msg is required!')
+      if (msgParts.length < 1) throw new Error('No key provided')
+
       const JWT = msgParts[1]
       const chatId = msg.from.id
       this.libraries.pinService.registerJWT({ JWT, chatId })
+      await this.libraries.telegramBot.bot.sendMessage(msg.chat.id, 'Key registered.')
 
-      const sentMsg = await this.libraries.telegramBot.bot.sendMessage(msg.chat.id, 'Key registered.')
-      this.libraries.telegramBot.deleteBotSpam(msg)
-      this.libraries.telegramBot.deleteBotSpam(sentMsg)
+      this.libraries.telegramBot._deleteMsgQuietly(msg)
+      return true
     } catch (error) {
       this.wlogger.error('Error in use-cases/setKey()')
       throw error

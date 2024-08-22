@@ -1,9 +1,10 @@
 import TelegramBot from 'node-telegram-bot-api'
-
+import axios from 'axios'
 class TelegramBotLib {
   constructor (localConfig = {}) {
     // Input Validation
-    this.token = localConfig.telegramBotToken
+    this.config = localConfig
+    this.token = this.config.telegramBotToken
 
     if (!this.token) {
       throw new Error(
@@ -11,8 +12,10 @@ class TelegramBotLib {
       )
     }
 
+    this.botServiceApi = this.config.botServiceApi
     this.TelegramBot = TelegramBot
     this.bot = {}
+    this.axios = axios
 
     this.delayMs = 10000 // 10 seconds.
 
@@ -20,12 +23,14 @@ class TelegramBotLib {
     this.deleteBotSpam = this.deleteBotSpam.bind(this)
     this._deleteMsgQuietly = this._deleteMsgQuietly.bind(this)
     this.downloadFile = this.downloadFile.bind(this)
+    this.getFilePath = this.getFilePath.bind(this)
   }
 
   instanceTelegramBot () {
     // Created instance of TelegramBot
     this.bot = new this.TelegramBot(this.token, {
-      polling: true
+      polling: true,
+      baseApiUrl: this.botServiceApi
     })
     return true
   }
@@ -61,6 +66,7 @@ class TelegramBotLib {
   async _deleteMsgQuietly (chatId, msgId) {
     try {
       await this.bot.deleteMessage(chatId, msgId)
+      await this.bot.logout()
     } catch (err) {
       /* Exit quietly */
     }
@@ -74,6 +80,25 @@ class TelegramBotLib {
     } catch (error) {
       // throw error
       console.log('Error on downloadFile')
+      throw error
+    }
+  }
+
+  async getFilePath (fileId) {
+    try {
+      if (!fileId) throw new Error('fileId is required')
+      const options = {
+        method: 'POST',
+        url: `${this.botServiceApi}/bot${this.token}/getFile`,
+        data: {
+          fileId
+        }
+      }
+
+      const result = await this.axios.request(options)
+      return result.data
+    } catch (error) {
+      console.log('Error on getFilePath()')
       throw error
     }
   }

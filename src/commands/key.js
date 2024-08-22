@@ -41,7 +41,7 @@ class KeyCommand {
       return true
     } catch (err) {
       this.wlogger.error('Error on commands/help/process()')
-      throw err
+      return false
     }
   }
 }

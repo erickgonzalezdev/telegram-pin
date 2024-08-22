@@ -103,4 +103,29 @@ describe('#TelegramBotLibrary', () => {
       }
     })
   })
+  describe('#getFilePath', () => {
+    it('should download file', async () => {
+      sandbox.stub(uut.axios, 'request').resolves({ data: 'success' })
+      const result = await uut.getFilePath('a file id ')
+      assert.equal(result, 'success')
+    })
+
+    it('should throw an error if fileId is not provided', async () => {
+      try {
+        await uut.getFilePath()
+        assert.fail('Unexpected code path')
+      } catch (error) {
+        assert.include(error.message, 'fileId is required')
+      }
+    })
+    it('should handle axios error', async () => {
+      try {
+        sandbox.stub(uut.axios, 'request').throws(new Error('test error'))
+        await uut.getFilePath('a file id ')
+        assert.fail('Unexpected code path')
+      } catch (error) {
+        assert.include(error.message, 'test error')
+      }
+    })
+  })
 })
