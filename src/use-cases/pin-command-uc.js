@@ -78,6 +78,7 @@ class PinUseCase {
       if (replyToMsg.document) return replyToMsg.document
       if (replyToMsg.video) return replyToMsg.video
       if (replyToMsg.animation) return replyToMsg.animation
+      if (replyToMsg.sticker) return replyToMsg.sticker
 
       return false
     } catch (error) {
