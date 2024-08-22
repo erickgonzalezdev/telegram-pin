@@ -91,7 +91,7 @@ class TelegramBotLib {
         method: 'POST',
         url: `${this.botServiceApi}/bot${this.token}/getFile`,
         data: {
-          fileId
+          file_id: fileId
         }
       }
 

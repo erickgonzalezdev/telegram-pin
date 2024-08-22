@@ -103,6 +103,18 @@ describe('#pin-use-case', () => {
         assert.fail('Unexpected code path')
       }
     })
+    it('should return sticker type', () => {
+      try {
+        const mock = Object.assign({}, mockReplyImgMsg)
+        mock.reply_to_message = { sticker: 'sticker' }
+        const result = uut.getFileFromRplyMsg(mock)
+        assert.isString(result)
+        assert.equal(result, 'sticker')
+      } catch (err) {
+        assert.fail('Unexpected code path')
+      }
+    })
+
     it('should return false for unknow type', () => {
       try {
         const mock = Object.assign({}, mockReplyImgMsg)

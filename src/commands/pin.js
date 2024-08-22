@@ -22,6 +22,7 @@ class PinCommand {
 
   async process (msg) {
     try {
+      console.log(msg)
       // Convert the message into an array of parts.
       const msgParts = msg.text.toString().split(' ')
 
@@ -37,7 +38,7 @@ class PinCommand {
 
       return true
     } catch (err) {
-      this.wlogger.error('Error on commands/help/process()')
+      this.wlogger.error('Error on commands/pin/process()')
       return false
     }
   }
