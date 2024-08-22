@@ -3,11 +3,11 @@ import sinon from 'sinon'
 
 import UseCases from '../../../src/use-cases/index.js'
 import Libraries from '../../../src/lib/index.js'
-import CommandUnderTest from '../../../src/commands/help.js'
-import { TelegramBotPackageMock, mockMsg } from '../mocks/telegram-bot-mock.js'
+import CommandUnderTest from '../../../src/commands/pin.js'
+import { TelegramBotPackageMock, mockMsg, mockReplyImgMsg } from '../mocks/telegram-bot-mock.js'
 import config from '../../../config.js'
 
-describe('#commands-help', () => {
+describe('#commands-pin', () => {
   let sandbox, uut, useCases, libraries
 
   beforeEach(() => {
@@ -31,7 +31,7 @@ describe('#commands-help', () => {
 
         assert.fail('Unexpected result')
       } catch (err) {
-        assert.include(err.message, 'Instance of Use Cases library required when instantiating HelpCommand Class.')
+        assert.include(err.message, 'Instance of Use Cases library required when instantiating PinCommand Class.')
       }
     })
     it('should throw an error if libraries are not passed in', () => {
@@ -42,28 +42,26 @@ describe('#commands-help', () => {
       } catch (err) {
         assert.include(
           err.message,
-          'Instance of Libraries required when instantiating HelpCommand Class.'
+          'Instance of Libraries required when instantiating PinCommand Class.'
         )
       }
     })
   })
 
   describe('#process', () => {
-    it('should return message when triggered', async () => {
+    it('should return true when triggered', async () => {
+      sandbox.stub(uut.useCases.pin, 'pinFile').resolves(true)
       // Mock dependencies
-      const result = await uut.process(mockMsg)
+      const result = await uut.process(mockReplyImgMsg)
 
       assert.isTrue(result)
     })
-
-    it('should skip there are any additional words in the command', async () => {
+    it('should return false if is not a reply msg', async () => {
       // Mock dependencies
-      mockMsg.text = '/help test'
       const result = await uut.process(mockMsg)
 
-      assert.equal(result, undefined)
+      assert.isFalse(result)
     })
-
     it('should return false on error', async () => {
       const result = await uut.process()
       assert.isFalse(result)
